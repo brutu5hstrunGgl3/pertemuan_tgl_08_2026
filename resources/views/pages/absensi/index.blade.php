@@ -1,19 +1,15 @@
 @extends('layouts.app')
 
-@section('title', 'User List')
-
-@push('style')
-    <!-- CSS Libraries -->
-@endpush
+@section('title', 'List Absensi')
 
 @section('main')
     <div class="main-content">
         <section class="section">
             <div class="section-header">
-                <h1>User List</h1>
+                <h1>List Absensi</h1>
                 <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item active"><a href="{{ route('users.index') }}">Dashboard</a></div>
-                    <div class="breadcrumb-item">User List</div>
+                    <div class="breadcrumb-item active"><a href="{{ route('home') }}">Dashboard</a></div>
+                    <div class="breadcrumb-item">List Absensi</div>
                 </div>
             </div>
 
@@ -21,14 +17,12 @@
                 <div class="invoice">
                     <div class="row mb-4">
                         <div class="col-md-6">
-                            <a href="{{ route('users.create') }}" class="btn btn-primary">
-                                <i class="fas fa-plus"></i> Tambah User
-                            </a>
+                           
                         </div>
                         <div class="col-md-6">
-                            <form action="{{ route('users.index') }}" method="GET" class="form-inline justify-content-end">
+                            <form action="{{ route('absensi.index') }}" method="GET" class="form-inline justify-content-end">
                                 <div class="input-group">
-                                    <input type="text" name="search" class="form-control" placeholder="Cari user..." value="{{ $search ?? '' }}">
+                                    <input type="text" name="search" class="form-control" placeholder="Cari absensi..." value="{{ request('search') }}">
                                     <div class="input-group-append">
                                         <button class="btn btn-primary" type="submit">
                                             <i class="fas fa-search"></i> Cari
@@ -41,7 +35,7 @@
 
                     <div class="row mt-4">
                         <div class="col-md-12">
-                            <div class="section-title">List User</div>
+                            <div class="section-title">List Absensi</div>
                             <p class="section-lead"></p>
                             <div class="table-responsive">
                                 <table class="table-striped table-hover table-md table">
@@ -49,37 +43,39 @@
                                         <tr>
                                             <th data-width="40">No</th>
                                             <th>Nama</th>
-                                            <th class="text-center">Email</th>
-                                            <th class="text-center">Jenis Kelamin</th>
-                                            <th class="text-center">No. Telepon</th>
-                                            <th>Alamat</th>
-                                            <th class="text-center">Jabatan</th>
+                                            <th class="text-center">Jam datang</th>
+                                            <th class="text-center">Jam pulang</th>
+                                            <th class="text-center">Shift</th>
+                                            <th class="text-center">Keterlambatan</th>
                                             <th class="text-right">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse ($users as $index => $user)
+                                        @forelse ($presensis as $index => $presensi)
                                             <tr>
-                                                <td>{{ ($users->currentPage() - 1) * $users->perPage() + $index + 1 }}</td>
-                                                <td>{{ $user->name }}</td>
-                                                <td class="text-center">{{ $user->email }}</td>
-                                                <td class="text-center">
-                                                    @if($user->jenis_kelamin == 'L')
-                                                        Laki-laki
-                                                    @elseif($user->jenis_kelamin == 'P')
-                                                        Perempuan
-                                                    @else
-                                                        -
-                                                    @endif
-                                                </td>
-                                                <td class="text-center">{{ $user->no_telp ?? '-' }}</td>
-                                                <td>{{ $user->alamat ?? '-' }}</td>
-                                                <td class="text-center">{{ $user->jabatan ?? '-' }}</td>
+                                                <td>{{ ($presensis->currentPage() - 1) * $presensis->perPage() + $index + 1 }}</td>
+                                                <td>{{ $presensi->user->name ?? '-' }}</td>
+                                            <td class="text-center">
+                                                @if($presensi->tanggal_masuk && $presensi->jam_masuk)
+                                                    {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $presensi->tanggal_masuk . ' ' . $presensi->jam_masuk)->format('d/m/Y H:i') }}
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
+                                            <td class="text-center">
+                                                @if($presensi->tanggal_pulang && $presensi->jam_pulang)
+                                                    {{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $presensi->tanggal_pulang . ' ' . $presensi->jam_pulang)->format('d/m/Y H:i') }}
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
+                                            <td class="text-center">{{ ucfirst($presensi->shift) ?? '-' }}</td>
+                                            <td class="text-center">{{ $presensi->keterlambatan ?? 0 }}</td>
                                                 <td class="text-right">
-                                                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-sm">
+                                                    <a href="{{ route('absensi.edit', $presensi->id) }}" class="btn btn-warning btn-sm">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
-                                                    <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?')">
+                                                    <form action="{{ route('absensi.destroy', $presensi->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data absensi ini?')">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-danger btn-sm">
@@ -90,7 +86,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="8" class="text-center">Tidak ada data user.</td>
+                                                <td colspan="7" class="text-center">Tidak ada data absensi.</td>
                                             </tr>
                                         @endforelse
                                     </tbody>
@@ -99,7 +95,7 @@
 
                             <div class="row mt-4">
                                 <div class="col-md-12">
-                                    {{ $users->links() }}
+                                    {{ $presensis->links() }}
                                 </div>
                             </div>
                         </div>
@@ -111,7 +107,5 @@
 @endsection
 
 @push('scripts')
-    <!-- JS Libraies -->
-
     <!-- Page Specific JS File -->
 @endpush

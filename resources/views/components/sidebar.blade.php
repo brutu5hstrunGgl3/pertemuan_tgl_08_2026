@@ -8,21 +8,40 @@
         </div>
 
        
-             <ul class="sidebar-menu">
+              <ul class="sidebar-menu">
             <li class="menu-header">Dashboard</li>
             <li class="nav-item dropdown ">
                 <a href="#"
-                    class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Management user</span></a>
+                    class="nav-link has-dropdown"><i class="fas fa-users"></i><span>Management User</span></a>
                 <ul class="dropdown-menu">
-                    <li class=''>
-                        <a class="nav-link"
-                            href="/user">User</a>
-                    </li>
-                    
-
                     <li class="">
                         <a class="nav-link"
-                            href=""></a>
+                            href="{{ route('users.index') }}">List User</a>
+                    </li>
+                    <li class="">
+                        <a class="nav-link"
+                            href="{{ route('users.create') }}">Tambah User</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="menu-header">Absensi</li>
+            <li class="nav-item dropdown">
+                <a href="#"
+                    class="nav-link has-dropdown"><i class="fas fa-calendar-check"></i><span>Absensi</span></a>
+                <ul class="dropdown-menu">
+                    <li class="">
+                        <a class="nav-link"
+                            href="{{ route('absensi.index') }}">List Absensi</a>
+                    </li>
+                    <li class="">
+                        <a class="nav-link"
+                            href="{{ route('absensi.create') }}">Absensi Datang</a>
+                    </li>
+
+                     <li class="">
+                        <a class="nav-link"
+                            href="{{ route('absensi.create') }}">Absensi Pulang</a>
                     </li>
                 </ul>
             </li>
