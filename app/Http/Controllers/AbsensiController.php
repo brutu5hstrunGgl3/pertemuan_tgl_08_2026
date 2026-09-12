@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DatangRequest;
 use App\Models\Presensi;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -22,18 +24,53 @@ class AbsensiController extends Controller
 
     public function store(DatangRequest $request)
     {
-         
-      
-        $data = $request->validated();
+        
+            
 
-        $waktu = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $data['tanggal_masuk']);
+        $data = $request->validated();
+        $user = Auth::user();
+
+        $waktu = Carbon::now('Asia/Jakarta');
+        
+        $tanggalMasuk = $waktu->format('Y-m-d');
+        $jamMasuk = $waktu->format('H:i:s');
+
+        $cek = Presensi::where('user_id', $user->id)
+            ->whereDate('tanggal_masuk', $tanggalMasuk)
+            ->first();
+
+        if ($cek) {
+            return redirect()->route('absensi.index')->with('error', 'Anda sudah melakukan absensi datang pada hari ini.');
+        }
+        $shift = strtolower($data['shift']);
+
+        if ($shift == 'pagi'){
+           $jamShift = Carbon::createFromFormat(
+            'Y-m-d H:i:s',
+            $tanggalMasuk.' 08:00:00',
+             'Asia/Jakarta'); 
+
+        }elseif ($shift == 'siang'){
+
+            $jamShift = Carbon::createFromFormat(
+                'Y-m-d H:i:s',
+                $tanggalMasuk.' 13:30:00',
+                 'Asia/Jakarta');
+        }else {
+            return back()->with('error', 'Shift tidak valid.');
+        }
+        $terlambat  = 0;
+        if ($waktu->greaterThan($jamShift)) {
+            $terlambat = $waktu->diffInMinutes($jamShift);
+            $keterangan = 'Terlambat '.$terlambat.' menit';
+        }
 
         Presensi::create([
             'user_id' => auth()->id(),
-            'tanggal_masuk' => $waktu->format('Y-m-d'),
-            'jam_masuk' => $waktu->format('H:i:s'),
-            'shift' => $data['shift'],
-            'keterlambatan' => 0,
+            'tanggal_masuk' => $tanggalMasuk,
+            'jam_masuk' => $jamMasuk,
+            'shift' => $shift,
+            'keterlambatan' => $terlambat,
         ]);
 
         return redirect()->route('absensi.index')->with('success', 'Absensi datang berhasil disimpan.');
@@ -44,25 +81,6 @@ class AbsensiController extends Controller
         return view('pages.absensi.show', compact('presensi'));
     }
 
-    public function edit(Presensi $presensi)
-    {
-        $users = User::all();
-        return view('pages.absensi.edit', compact('presensi', 'users'));
-    }
-
-    public function update(Request $request, Presensi $presensi)
-    {
-        $validated = $request->validate([
-            'waktu_datang' => 'nullable|date',
-            'waktu_pulang' => 'nullable|date',
-            'shift' => 'nullable|in:pagi,siang',
-            'keterangan' => 'nullableF|string|max:500',
-        ]);
-
-        $presensi->update($validated);
-
-        return redirect()->route('absensi.index')->with('success', 'Absensi berhasil diperbarui.');
-    }
 
     public function destroy(Presensi $presensi)
     {

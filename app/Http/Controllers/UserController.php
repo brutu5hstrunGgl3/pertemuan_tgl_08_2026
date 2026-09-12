@@ -44,7 +44,13 @@ class UserController extends Controller
             'no_telp' => 'nullable|string|max:20',
             'alamat' => 'nullable|string|max:500',
             'jabatan' => 'nullable|string|max:255',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        $fotoPath = null;
+        if ($request->hasFile('foto')) {
+            $fotoPath = $request->file('foto')->store('fotos');
+        }
 
         User::create([
             'name' => $request->name,
@@ -54,6 +60,7 @@ class UserController extends Controller
             'no_telp' => $request->no_telp,
             'alamat' => $request->alamat,
             'jabatan' => $request->jabatan,
+            'foto' => $fotoPath,
         ]);
 
         return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan.');
@@ -83,6 +90,7 @@ class UserController extends Controller
             'no_telp' => 'nullable|string|max:20',
             'alamat' => 'nullable|string|max:500',
             'jabatan' => 'nullable|string|max:255',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $user->name = $request->name;

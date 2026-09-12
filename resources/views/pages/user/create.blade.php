@@ -31,7 +31,7 @@
                         <h4>Form Tambah User</h4>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('users.store') }}" method="POST" class="needs-validation" novalidate>
+                        <form action="{{ route('users.store') }}" method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
                             @csrf
                             <div class="form-group row mb-4">
                                 <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Nama</label>
@@ -112,6 +112,16 @@
                                 <div class="col-sm-12 col-md-7 col-lg-7">
                                     <input type="text" class="form-control @error('jabatan') is-invalid @enderror" name="jabatan" value="{{ old('jabatan') }}">
                                     @error('jabatan')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row mb-4">
+                                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Foto</label>
+                                <div class="col-sm-12 col-md-7 col-lg-7">
+                                    <input type="file" class="form-control @error('foto') is-invalid @enderror" name="foto" accept="image/*">
+                                    @error('foto')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>

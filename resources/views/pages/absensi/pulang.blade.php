@@ -108,7 +108,7 @@
 
                             <p>Jam Server</p>
 
-                            <form action="" method="POST">
+                            <form action="{{ route('absen_pulang.store') }}" method="POST">
 
                                 @csrf
 

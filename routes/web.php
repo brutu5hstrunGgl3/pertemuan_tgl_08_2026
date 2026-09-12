@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AbsensiController;
+use App\Http\Controllers\AbsenPulangController;
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', function () {
@@ -11,6 +12,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('users', UserController::class);
     Route::resource('absensi', AbsensiController::class)->parameters(['absensi' => 'presensi']);
+    Route::resource('absen_pulang', AbsenPulangController::class);
 });
 
 

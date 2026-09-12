@@ -54,6 +54,7 @@
                                             <th class="text-center">No. Telepon</th>
                                             <th>Alamat</th>
                                             <th class="text-center">Jabatan</th>
+                                            <th class="text-center">Foto</th>
                                             <th class="text-right">Aksi</th>
                                         </tr>
                                     </thead>
@@ -75,6 +76,13 @@
                                                 <td class="text-center">{{ $user->no_telp ?? '-' }}</td>
                                                 <td>{{ $user->alamat ?? '-' }}</td>
                                                 <td class="text-center">{{ $user->jabatan ?? '-' }}</td>
+                                                <td class="text-center">
+                                                    @if($user->foto)
+                                                        <img src="{{ Storage::url($user->foto) }}" alt="Foto" class="img-thumbnail" style="max-width: 100px;">
+                                                    @else
+                                                        -
+                                                    @endif
+                                                </td>
                                                 <td class="text-right">
                                                     <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-sm">
                                                         <i class="fas fa-edit"></i> Edit

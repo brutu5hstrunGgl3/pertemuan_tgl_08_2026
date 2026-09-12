@@ -41,7 +41,7 @@
 
                      <li class="">
                         <a class="nav-link"
-                            href="{{ route('absensi.create') }}">Absensi Pulang</a>
+                            href="{{ route('absen_pulang.create') }}">Absensi Pulang</a>
                     </li>
                 </ul>
             </li>

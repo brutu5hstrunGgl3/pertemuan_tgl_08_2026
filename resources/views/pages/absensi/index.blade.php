@@ -7,12 +7,28 @@
         <section class="section">
             <div class="section-header">
                 <h1>List Absensi</h1>
+    
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="{{ route('home') }}">Dashboard</a></div>
                     <div class="breadcrumb-item">List Absensi</div>
                 </div>
             </div>
-
+ @if (session('success'))
+                    <div class="alert alert-success alert-dismissible fade show">
+                        {{ session('success') }}
+                        <button type="button" class="close" data-dismiss="alert">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                @endif
+                @if (session('error'))
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        {{ session('error') }}
+                        <button type="button" class="close" data-dismiss="alert">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                @endif
             <div class="section-body">
                 <div class="invoice">
                     <div class="row mb-4">
@@ -70,7 +86,7 @@
                                                 @endif
                                             </td>
                                             <td class="text-center">{{ ucfirst($presensi->shift) ?? '-' }}</td>
-                                            <td class="text-center">{{ $presensi->keterlambatan ?? 0 }}</td>
+                                            <td class="text-center">{{ $presensi->keterlambatan ?? '-' }}Menit </td>
                                                 <td class="text-right">
                                                     <a href="{{ route('absensi.edit', $presensi->id) }}" class="btn btn-warning btn-sm">
                                                         <i class="fas fa-edit"></i> Edit
