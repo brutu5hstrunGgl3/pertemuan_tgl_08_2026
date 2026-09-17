@@ -28,14 +28,6 @@ class AbsenPulangController extends Controller
           $absensi = Presensi::where('user_id', $user->id)
               ->whereDate('created_at', today())
               ->first();
-
-            //   if (!$absensi) {
-            //     return back()->with('error', 'Anda belum melakukan absensi datang hari ini.');
-            //   }
-            //   if (!$absensi->jam_pulang) {
-            //       return back()->with('error', 'Anda sudah melakukan absensi pulang hari ini.');
-            //   }
-
               return view('pages.absensi.pulang', compact('absensi'));
     }
  

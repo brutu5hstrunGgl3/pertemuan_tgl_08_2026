@@ -4,6 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\UserRequest;
+use App\Http\Requests\UpdateUser;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\UsersExport;
 
 class UserController extends Controller
 {
@@ -34,24 +40,14 @@ class UserController extends Controller
         return view('pages.user.create');
     }
 
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'jenis_kelamin' => 'nullable|string|in:L,P',
-            'no_telp' => 'nullable|string|max:20',
-            'alamat' => 'nullable|string|max:500',
-            'jabatan' => 'nullable|string|max:255',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+        
 
         $fotoPath = null;
         if ($request->hasFile('foto')) {
-            $fotoPath = $request->file('foto')->store('fotos');
+            $fotoPath = $request->file('foto')->store('fotos', 'public');
         }
-
         User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -78,21 +74,11 @@ class UserController extends Controller
         return view('pages.user.edit', compact('user'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(UpdateUser $request, string $id)
     {
         $user = User::findOrFail($id);
 
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|min:8|confirmed',
-            'jenis_kelamin' => 'nullable|string|in:L,P',
-            'no_telp' => 'nullable|string|max:20',
-            'alamat' => 'nullable|string|max:500',
-            'jabatan' => 'nullable|string|max:255',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
+       
         $user->name = $request->name;
         $user->email = $request->email;
         $user->jenis_kelamin = $request->jenis_kelamin;
@@ -103,6 +89,14 @@ class UserController extends Controller
         if ($request->password) {
             $user->password = bcrypt($request->password);
         }
+
+        if ($request->hasFile('foto')) {
+    // hapus foto lama kalau ada
+    if ($user->foto) {
+        Storage::disk('public')->delete($user->foto);
+    }
+    $user->foto = $request->file('foto')->store('fotos', 'public');
+}
 
         $user->save();
 
@@ -115,5 +109,10 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('users.index')->with('success', 'User berhasil dihapus.');
+    }
+
+    public function export() 
+    {
+        return Excel::download(new UsersExport, 'users.xlsx');
     }
 }

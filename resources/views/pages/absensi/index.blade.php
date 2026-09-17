@@ -29,6 +29,9 @@
                         </button>
                     </div>
                 @endif
+                 <a href="" class="btn btn-success">
+                                <i class="fas fa-download"></i> Export excel
+                            </a>
             <div class="section-body">
                 <div class="invoice">
                     <div class="row mb-4">

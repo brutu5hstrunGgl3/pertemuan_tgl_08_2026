@@ -48,6 +48,17 @@
 </div>
 
 <div class="card-body text-center">
+    @if(auth()->user()->foto)
+        <img src="{{ Storage::url(auth()->user()->foto) }}" 
+             alt="Foto Profil" 
+             class="rounded-circle img-thumbnail mb-2" 
+             style="width: 100px; height: 100px; object-fit: cover;">
+    @else
+        <img src="{{ asset('assets/img/avatar/avatar-default.png') }}" 
+             alt="Foto Default" 
+             class="rounded-circle img-thumbnail mb-2" 
+             style="width: 100px; height: 100px; object-fit: cover;">
+    @endif
     <h5>{{ auth()->user()->name }}</h5>
     <hr>
 

@@ -16,6 +16,14 @@
                     <div class="breadcrumb-item">User List</div>
                 </div>
             </div>
+ @if(session('success'))
+                            <div class="alert alert-success alert-dismissible fade show">
+                                {{ session('success') }}
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <span>&times;</span>
+                                </button>
+                            </div>
+                        @endif
 
             <div class="section-body">
                 <div class="invoice">
@@ -24,7 +32,12 @@
                             <a href="{{ route('users.create') }}" class="btn btn-primary">
                                 <i class="fas fa-plus"></i> Tambah User
                             </a>
+                            
+                             <a href="{{ route('users.export') }}" class="btn btn-success">
+                                <i class="fas fa-download"></i> Export excel
+                            </a>
                         </div>
+                      
                         <div class="col-md-6">
                             <form action="{{ route('users.index') }}" method="GET" class="form-inline justify-content-end">
                                 <div class="input-group">
@@ -78,7 +91,7 @@
                                                 <td class="text-center">{{ $user->jabatan ?? '-' }}</td>
                                                 <td class="text-center">
                                                     @if($user->foto)
-                                                        <img src="{{ Storage::url($user->foto) }}" alt="Foto" class="img-thumbnail" style="max-width: 100px;">
+                                                        <img src="{{ Storage::url($user->foto) }}" alt="Foto" class="img-thumbnail" style="max-width: 80px;">
                                                     @else
                                                         -
                                                     @endif

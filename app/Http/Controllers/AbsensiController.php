@@ -25,8 +25,6 @@ class AbsensiController extends Controller
     public function store(DatangRequest $request)
     {
         
-            
-
         $data = $request->validated();
         $user = Auth::user();
 
@@ -59,9 +57,10 @@ class AbsensiController extends Controller
         }else {
             return back()->with('error', 'Shift tidak valid.');
         }
+
         $terlambat  = 0;
         if ($waktu->greaterThan($jamShift)) {
-            $terlambat = $waktu->diffInMinutes($jamShift);
+           $terlambat = $jamShift->diffInMinutes($waktu, true);
             $keterangan = 'Terlambat '.$terlambat.' menit';
         }
 
@@ -71,6 +70,7 @@ class AbsensiController extends Controller
             'jam_masuk' => $jamMasuk,
             'shift' => $shift,
             'keterlambatan' => $terlambat,
+        
         ]);
 
         return redirect()->route('absensi.index')->with('success', 'Absensi datang berhasil disimpan.');
