@@ -8,12 +8,20 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\AbsensiExport;
+
 
 class AbsensiController extends Controller
 {
-    public function index()
+    public function index( )
     {
-        $presensis = Presensi::with('user')->paginate(10);
+
+        //by auth 
+        $user = Auth::user();
+        $presensis = Presensi::
+        where('user_id', $user->id)
+        ->paginate(10);
         return view('pages.absensi.index', compact('presensis'));
     }
 
@@ -87,5 +95,11 @@ class AbsensiController extends Controller
         $presensi->delete();
 
         return redirect()->route('absensi.index')->with('success', 'Absensi berhasil dihapus.');
+    }
+
+
+    public function export() 
+    {
+        return Excel::download(new AbsensiExport, 'absensi.xlsx');
     }
 }

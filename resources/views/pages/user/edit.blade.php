@@ -126,8 +126,27 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                            </div>
+                                </div>  
+                              <div class="form-group row mb-4"> 
+                              <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Role</label>
+                              <select name="role" id="role" class="col-sm-12 col-md-7 col-lg-7" required>
+                              <option value="admin"
+                              {{ $user->roles->first()?->name == 'admin' ? 'selected' : '' }}>
+                                  admin
+                              </option>
+                                <option value="staff"
+                                    {{ $user->roles->first()?->name == 'staff' ? 'selected' : '' }}>
+                                    staff
+                                </option>
 
+                                <option value="karyawan"
+                                    {{ $user->roles->first()?->name == 'karyawan' ? 'selected' : '' }}>
+                                    karyawan
+                                </option>
+                            </select>
+                        </div>
+                            </div>
+                            
                             <div class="form-group row mb-4">
                                 <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
                                 <div class="col-sm-12 col-md-7 col-lg-7">

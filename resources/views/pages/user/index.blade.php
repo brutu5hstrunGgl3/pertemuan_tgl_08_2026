@@ -68,6 +68,7 @@
                                             <th>Alamat</th>
                                             <th class="text-center">Jabatan</th>
                                             <th class="text-center">Foto</th>
+                                            <th class="text-center">Status</th>
                                             <th class="text-right">Aksi</th>
                                         </tr>
                                     </thead>
@@ -96,7 +97,14 @@
                                                         -
                                                     @endif
                                                 </td>
-                                                <td class="text-right">
+                                               <td class="text-center">
+                                                    @if($user->roles->isNotEmpty())
+                                                    {{ $user->roles->first()->name }}
+                                                        @else
+                                                        Tidak Ada Role
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-right">
                                                     <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-sm">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>

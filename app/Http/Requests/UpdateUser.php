@@ -32,6 +32,7 @@ class UpdateUser extends FormRequest
             'alamat' => 'nullable|string|max:500',
             'jabatan' => 'nullable|string|max:255',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'role' => 'required|exists:roles,name',
         ];
     }
     

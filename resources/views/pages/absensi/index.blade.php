@@ -29,9 +29,11 @@
                         </button>
                     </div>
                 @endif
-                 <a href="" class="btn btn-success">
+                @hasanyrole('admmin | staaff')
+                 <a href="{{ route('absensi.export') }}" class="btn btn-success">
                                 <i class="fas fa-download"></i> Export excel
                             </a>
+                @endhasanyrole
             <div class="section-body">
                 <div class="invoice">
                     <div class="row mb-4">
@@ -66,7 +68,7 @@
                                             <th class="text-center">Jam pulang</th>
                                             <th class="text-center">Shift</th>
                                             <th class="text-center">Keterlambatan</th>
-                                            <th class="text-right">Aksi</th>
+                                           @hasanyrole('admin|staff') <th class="text-right">Aksi </th>@endhasanyrole
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -90,6 +92,7 @@
                                             </td>
                                             <td class="text-center">{{ ucfirst($presensi->shift) ?? '-' }}</td>
                                             <td class="text-center">{{ $presensi->keterlambatan ?? '-' }}Menit </td>
+                                            @hasanyrole( 'admin|staff')
                                                 <td class="text-right">
                                                     <a href="{{ route('absensi.edit', $presensi->id) }}" class="btn btn-warning btn-sm">
                                                         <i class="fas fa-edit"></i> Edit
@@ -100,6 +103,7 @@
                                                         <button type="submit" class="btn btn-danger btn-sm">
                                                             <i class="fas fa-trash"></i> Hapus
                                                         </button>
+                                                            @endhasanyrole
                                                     </form>
                                                 </td>
                                             </tr>

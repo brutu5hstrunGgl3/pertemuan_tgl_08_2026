@@ -9,14 +9,17 @@
 
        
               <ul class="sidebar-menu">
-            <li class="menu-header">Dashboard</li>
+                @hasanyrole('admin|staff') 
+            <li class="menu-header">Dashboard</li>@endhasanyrole
             <li class="nav-item dropdown ">
+                  @hasanyrole('admin|staff') 
                 <a href="#"
+                
                     class="nav-link has-dropdown"><i class="fas fa-users"></i><span>Management User</span></a>
                 <ul class="dropdown-menu">
                     <li class="">
                         <a class="nav-link"
-                            href="{{ route('users.index') }}">List User</a>
+                            href="{{ route('users.index') }} by ">List User</a>
                     </li>
                     <li class="">
                         <a class="nav-link"
@@ -24,7 +27,7 @@
                     </li>
                 </ul>
             </li>
-
+            @endhasanyrole
             <li class="menu-header">Absensi</li>
             <li class="nav-item dropdown">
                 <a href="#"

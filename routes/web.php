@@ -19,6 +19,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/users/export', [UserController::class, 'export'])->name('users.export');
     Route::resource('users', UserController::class);
+    Route::get('/absensi/export', [AbsensiController::class, 'export'])->name('absensi.export');
+
     Route::resource('absensi', AbsensiController::class)->parameters(['absensi' => 'presensi']);
     Route::resource('absen_pulang', AbsenPulangController::class);
    

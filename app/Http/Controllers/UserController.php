@@ -48,7 +48,7 @@ class UserController extends Controller
         if ($request->hasFile('foto')) {
             $fotoPath = $request->file('foto')->store('fotos', 'public');
         }
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
@@ -59,7 +59,12 @@ class UserController extends Controller
             'foto' => $fotoPath,
         ]);
 
-        return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan.');
+     $user->assignRole('karyawan');
+
+    return redirect()
+        ->route('users.index')
+        ->with('success', 'User berhasil ditambahkan.');
+
     }
 
     public function show(string $id)
@@ -76,7 +81,7 @@ class UserController extends Controller
 
     public function update(UpdateUser $request, string $id)
     {
-        $user = User::findOrFail($id);
+    $user = User::findOrFail($id);
 
        
         $user->name = $request->name;
@@ -100,8 +105,15 @@ class UserController extends Controller
 
         $user->save();
 
-        return redirect()->route('users.index')->with('success', 'User berhasil diperbarui.');
+        $user->syncRoles([$request->role]);
+
+         return redirect()
+        ->route('users.index')
+        ->with('success', 'User berhasil diperbarui.');
+
     }
+
+
 
     public function destroy(string $id)
     {
