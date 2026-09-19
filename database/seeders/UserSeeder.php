@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 
 class UserSeeder extends Seeder
@@ -18,13 +19,18 @@ class UserSeeder extends Seeder
 
    
        User:: factory(100)->create();
-
-       User::create([
-            'name' => 'Admin',
+       $adminRole = Role::firstOrCreate([
+        'name' => 'admin',
+        'guard_name' => 'web',
+        ]); // Ganti 'admin' dengan nama peran admin yang sesua
+       $user = User::create([
+            'name' => 'admin',
             'email' => 'admin@admin.com',
             'email_verified_at' => now(),
             'password' => Hash::make('12345678'),
         ]); 
+
+        $user->assignRole('admin');
     
 }
         }
