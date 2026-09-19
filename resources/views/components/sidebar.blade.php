@@ -19,7 +19,7 @@
                 <ul class="dropdown-menu">
                     <li class="">
                         <a class="nav-link"
-                            href="{{ route('users.index') }} by ">List User</a>
+                            href="{{ route('users.index') }}">List User</a>
                     </li>
                     <li class="">
                         <a class="nav-link"
